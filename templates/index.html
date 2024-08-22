@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Executor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        textarea, select, input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-group">
+            <label for="codeTitle">The Problem</label>
+        </div>
+        <div class="form-group">
+            <label for="codeDescription">Code Description</label>
+            <p>This is the description for your code problem.</p>
+        </div>
+        <div class="form-group">
+            <label for="codeLanguage">Select Language</label>
+            <select id="codeLanguage">
+                <option value="python">Python</option>
+                <option value="javascript">JavaScript</option>
+                <option value="cpp">C++</option>
+                <option value="java">Java</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="codeInput">Code</label>
+            <textarea id="codeInput" rows="10" placeholder="Enter your code here"></textarea>
+        </div>
+        <button onclick="executeCode()">Execute</button>
+        <div id="output" class="output"></div>
+    </div>
+
+    <script>
+        async function executeCode() {
+            const code = document.getElementById('codeInput').value;
+            const language = document.getElementById('codeLanguage').value;
+            const outputDiv = document.getElementById('output');
+            outputDiv.textContent = 'Executing...';
+
+            const response = await fetch('/execute', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code, language })
+            });
+
+            const result = await response.json();
+            outputDiv.textContent = result.output;
+        }
+    </script>
+</body>
+</html>
